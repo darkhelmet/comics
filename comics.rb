@@ -6,6 +6,7 @@ require 'downloader'
 configure do
   disable :lock
   set :cache, ActiveSupport::Cache::DalliStore.new(expires_in: 1.day)
+  set :stupid_prefixes, %w(atom10 feedburner)
 end
 
 helpers do
@@ -42,6 +43,15 @@ helpers do
     desc.children.each(&:remove)
     desc.add_child(cdata)
   end
+
+  def stupid_feedburner(node)
+    if node.namespace && settings.stupid_prefixes.include?(node.namespace.prefix)
+      node.remove
+      return
+    else
+      node.children.each { |child| stupid_feedburner(child) }
+    end
+  end
 end
 
 get '/' do
@@ -51,6 +61,7 @@ end
 get '/explosm' do
   content_type :rss
   with_rss('http://feeds.feedburner.com/Explosm') do |doc|
+    stupid_feedburner(doc.root)
     remove_unless_title_match(doc, /\d{2}\.\d{2}\.\d{4}/)
     with_each_link_and_page(doc) do |link, page|
       img = page.at('img:first[alt="Cyanide and Happiness, a daily webcomic"]')
