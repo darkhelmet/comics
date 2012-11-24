@@ -58,6 +58,10 @@ get '/' do
   'Hello, World!'
 end
 
+delete '/' do
+  settings.cache.clear
+end
+
 get '/explosm' do
   content_type :rss
   with_rss('http://feeds.feedburner.com/Explosm') do |doc|
