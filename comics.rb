@@ -60,6 +60,7 @@ end
 
 delete '/' do
   settings.cache.clear
+  'ok'
 end
 
 get '/explosm' do
