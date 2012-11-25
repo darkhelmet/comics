@@ -68,6 +68,7 @@ get '/explosm' do
   with_rss('http://feeds.feedburner.com/Explosm') do |doc|
     stupid_feedburner(doc.root)
     remove_unless_title_match(doc, /\d{2}\.\d{2}\.\d{4}/)
+    doc.at('channel link').remove
     with_each_link_and_page(doc) do |link, page|
       img = page.at('img:first[alt="Cyanide and Happiness, a daily webcomic"]')
       replace_description_with(doc, link, img.to_s)
