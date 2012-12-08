@@ -15,7 +15,7 @@ helpers do
       resp = RestClient.get(url)
       doc = Nokogiri::XML(resp)
       yield(doc)
-      doc
+      doc.to_s
     end
   end
 
@@ -64,7 +64,7 @@ end
 
 get '/cyanide' do
   content_type :rss
-  '<?xml version="1.0"?>' + with_rss('http://feeds.feedburner.com/Explosm') do |doc|
+  with_rss('http://feeds.feedburner.com/Explosm') do |doc|
     stupid_feedburner(doc.root)
     remove_unless_title_match(doc, /\d{2}\.\d{2}\.\d{4}/)
     doc.at('channel link').remove
@@ -74,7 +74,7 @@ get '/cyanide' do
       img = page.at('img:first[alt="Cyanide and Happiness, a daily webcomic"]')
       replace_description_with(doc, link, img.to_s)
     end
-  end.at('rss').to_s
+  end
 end
 
 get '/cad' do
@@ -85,5 +85,5 @@ get '/cad' do
       img = page.at('#content > img:first')
       replace_description_with(doc, link, img.to_s)
     end
-  end.to_s
+  end
 end
