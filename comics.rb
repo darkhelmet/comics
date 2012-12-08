@@ -15,7 +15,7 @@ helpers do
       resp = RestClient.get(url)
       doc = Nokogiri::XML(resp)
       yield(doc)
-      doc.to_s
+      doc
     end
   end
 
@@ -47,7 +47,6 @@ helpers do
   def stupid_feedburner(node)
     if node.namespace && settings.stupid_prefixes.include?(node.namespace.prefix)
       node.remove
-      return
     else
       node.children.each { |child| stupid_feedburner(child) }
     end
@@ -63,18 +62,19 @@ delete '/' do
   'ok'
 end
 
-get '/explosm' do
+get '/cyanide' do
   content_type :rss
-  with_rss('http://feeds.feedburner.com/Explosm') do |doc|
+  '<?xml version="1.0"?>' + with_rss('http://feeds.feedburner.com/Explosm') do |doc|
     stupid_feedburner(doc.root)
     remove_unless_title_match(doc, /\d{2}\.\d{2}\.\d{4}/)
     doc.at('channel link').remove
+    doc.at('channel description').remove
     doc.at('channel title').children.first.content = "Explosm, Just The Comics"
     with_each_link_and_page(doc) do |link, page|
       img = page.at('img:first[alt="Cyanide and Happiness, a daily webcomic"]')
       replace_description_with(doc, link, img.to_s)
     end
-  end
+  end.at('rss').to_s
 end
 
 get '/cad' do
@@ -85,5 +85,5 @@ get '/cad' do
       img = page.at('#content > img:first')
       replace_description_with(doc, link, img.to_s)
     end
-  end
+  end.to_s
 end
