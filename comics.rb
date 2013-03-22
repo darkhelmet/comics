@@ -99,7 +99,8 @@ get '/thedoghousediaries' do
   with_rss('http://feeds2.feedburner.com/thedoghousediaries/feed') do |doc|
     with_each_item(doc) do |item|
       content = item.children.detect { |child| child.name == 'encoded' }
-      replace_description_with(doc, item, content.to_s)
+      replace_description_with(doc, item, content.content)
+      content.remove
     end
   end
 end
