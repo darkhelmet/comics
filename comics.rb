@@ -37,9 +37,15 @@ helpers do
     end
   end
 
-  def replace_description_with(doc, link, str)
+  def with_each_item(doc)
+    doc.search('item').each do |item|
+      yield(item)
+    end
+  end
+
+  def replace_description_with(doc, item, str)
     cdata = Nokogiri::XML::CDATA.new(doc, str)
-    desc = link.parent.at('description')
+    desc = item.at('description')
     desc.children.each(&:remove)
     desc.add_child(cdata)
   end
@@ -72,7 +78,7 @@ get '/cyanide' do
     doc.at('channel title').children.first.content = "Explosm, Just The Comics"
     with_each_link_and_page(doc) do |link, page|
       img = page.at('img:first[alt="Cyanide and Happiness, a daily webcomic"]')
-      replace_description_with(doc, link, img.to_s)
+      replace_description_with(doc, link.parent, img.to_s)
     end
   end
 end
@@ -83,7 +89,17 @@ get '/cad' do
     remove_unless_title_match(doc, /^Ctrl/)
     with_each_link_and_page(doc) do |link, page|
       img = page.at('#content > img:first')
-      replace_description_with(doc, link, img.to_s)
+      replace_description_with(doc, link.parent, img.to_s)
+    end
+  end
+end
+
+get '/thedoghousediaries' do
+  content_type :rss
+  with_rss('http://feeds2.feedburner.com/thedoghousediaries/feed') do |doc|
+    with_each_item(doc) do |item|
+      content = item.children.detect { |child| child.name == 'encoded' }
+      replace_description_with(doc, item, content.to_s)
     end
   end
 end
