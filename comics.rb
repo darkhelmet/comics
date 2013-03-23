@@ -11,12 +11,10 @@ end
 
 helpers do
   def with_rss(url)
-    settings.cache.fetch(url) do
-      resp = RestClient.get(url)
-      doc = Nokogiri::XML(resp)
-      yield(doc)
-      doc.to_s
-    end
+    resp = RestClient.get(url)
+    doc = Nokogiri::XML(resp)
+    yield(doc)
+    doc.to_s
   end
 
   def remove_unless_title_match(doc, re)
