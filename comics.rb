@@ -102,8 +102,3 @@ get '/thedoghousediaries' do
     end
   end
 end
-
-get '/clear' do
-  settings.cache.clear
-  'ok'
-end
