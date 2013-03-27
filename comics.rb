@@ -7,7 +7,6 @@ configure do
   disable :lock
   set :cache, ActiveSupport::Cache::DalliStore.new(expires_in: 1.day)
   set :stupid_prefixes, %w(atom10 feedburner)
-  set :pool_size, ENV.fetch('POOL_SIZE', '2').to_i
 end
 
 helpers do
@@ -25,10 +24,10 @@ helpers do
   end
 
   def with_each_link_and_page(doc)
+    downloader = Downloader.new(settings.cache)
     links = doc.search('item link')
-    downloader_pool = Downloader.pool(size: settings.pool_size, args: [settings.cache])
     map = links.reduce({}) do |map, link|
-      map.merge!(link => downloader_pool.future.get_and_parse(link.text))
+      map.merge!(link => downloader.future.get_and_parse(link.text))
     end
 
     links.each do |link|

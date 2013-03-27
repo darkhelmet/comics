@@ -1,11 +1,11 @@
-require 'celluloid'
-
 class Downloader
-  include Celluloid
+  include MonitorMixin
+  include LolConcurrency::Future
 
   attr_reader :cache
 
   def initialize(cache)
+    super()
     @cache = cache
   end
 

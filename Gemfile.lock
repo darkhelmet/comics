@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/darkhelmet/lol_concurrency.git
+  revision: 198ba49432aabd607197dc75e653f19ef89741bb
+  specs:
+    lol_concurrency (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -5,20 +11,25 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     builder (3.2.0)
-    celluloid (0.13.0)
-      timers (>= 1.0.0)
     coderay (1.0.9)
     dalli (2.6.2)
     i18n (0.6.1)
     method_source (0.8.1)
     mime-types (1.21)
     multi_json (1.7.2)
+    nokogiri (1.5.9)
     nokogiri (1.5.9-java)
+    pry (0.9.12)
+      coderay (~> 1.0.5)
+      method_source (~> 0.8)
+      slop (~> 3.4)
     pry (0.9.12-java)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
       spoon (~> 0.0)
+    puma (1.6.3)
+      rack (~> 1.2)
     puma (1.6.3-java)
       rack (~> 1.2)
     rack (1.5.2)
@@ -33,7 +44,6 @@ GEM
     slop (3.4.4)
     spoon (0.0.1)
     tilt (1.3.6)
-    timers (1.1.0)
 
 PLATFORMS
   java
@@ -41,8 +51,8 @@ PLATFORMS
 DEPENDENCIES
   activesupport (~> 3.2.13)
   builder (~> 3.2.0)
-  celluloid (~> 0.13.0)
   dalli (~> 2.6.2)
+  lol_concurrency!
   nokogiri (~> 1.5.5)
   pry
   puma (~> 1.6.3)
