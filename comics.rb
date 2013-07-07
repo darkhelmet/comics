@@ -1,7 +1,7 @@
 require 'bundler/setup'
 Bundler.require
 require 'sinatra'
-require 'downloader'
+require_relative 'downloader'
 
 configure do
   disable :lock

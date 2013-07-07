@@ -1,2 +1,2 @@
-require 'comics'
+require './comics'
 run Sinatra::Application
