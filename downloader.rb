@@ -13,10 +13,10 @@ class Downloader
   end
 
   def get(url)
-    cache.fetch(url) {
+    cache.fetch(url) do
       log.info("downloading #{url}")
       RestClient.get(url)
-    }
+    end
   end
 
   def get_and_parse(url)
