@@ -1,15 +1,11 @@
 require 'logger'
 
-class Downloader
+Downloader = Struct.new(:cache, :log)
   include MonitorMixin
   include LolConcurrency::Future
 
-  attr_reader :cache, :log
-
   def initialize(cache)
-    super()
-    @cache = cache
-    @log = Logger.new(STDOUT)
+    super(cache, Logger.new(STDOUT))
   end
 
   def get(url)
