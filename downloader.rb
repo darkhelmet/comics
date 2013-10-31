@@ -1,6 +1,6 @@
 require 'logger'
 
-Downloader = Struct.new(:cache, :log)
+Downloader = Struct.new(:cache, :log) do
   include MonitorMixin
   include LolConcurrency::Future
 
