@@ -66,7 +66,8 @@ get '/cyanide' do
     doc.at('channel description').remove
     doc.at('channel title').children.first.content = "Explosm, Just The Comics"
     with_each_link_and_page(doc) do |link, page|
-      img = page.at('img:first[alt="Cyanide and Happiness, a daily webcomic"]')
+      img = page.at('img#main-comic')
+      img['src'] = 'http:' + img['src']
       replace_description_with(doc, link.parent, img.to_s)
     end
   end
